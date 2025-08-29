@@ -6,6 +6,10 @@ const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 
+// Loads Node.js’s built-in Path module.
+// path → This module provides utilities for working with file and directory paths (e.g., joining paths, resolving absolute paths, getting file extensions).
+const path = require("path");
+
 //tells Express to start an HTTP server on port 8080
 app.listen(8080,() =>{
     console.log(`server is listening to port 8080`);
@@ -29,17 +33,24 @@ async function main() {
 }
 
 // it will add sample data for listing schema
-app.get("/testListing", async (req,res) =>{
-    let sampleListing = new Listing({
-    title: "Mountain View Cabin",     // required field
-    description: "A cozy wooden cabin with a breathtaking view of the Himalayas.",
-    image: "", // agar blank diya to default Unsplash image set ho jayegi
-    price: 2500,
-    location: "Manali",
-    country: "India"
-    });
+// app.get("/testListing", async (req,res) =>{
+//     let sampleListing = new Listing({
+//     title: "Mountain View Cabin",     // required field
+//     description: "A cozy wooden cabin with a breathtaking view of the Himalayas.",
+//     image: "", // agar blank diya to default Unsplash image set ho jayegi
+//     price: 2500,
+//     location: "Manali",
+//     country: "India"
+//     });
 
-// Pehla document save karne par "listings" collection banega
-await sampleListing.save();
-res.send("sample data added");
+// // Pehla document save karne par "listings" collection banega
+// await sampleListing.save();
+// res.send("sample data added");
+// });
+
+
+//Index Route
+app.get("/listing",async (req,res) => {
+   const allListings = await Listing.find({});
+   res.render("index.ejs", {allListings});
 });
