@@ -10,6 +10,11 @@ const Listing = require("./models/listing.js");
 // path → This module provides utilities for working with file and directory paths (e.g., joining paths, resolving absolute paths, getting file extensions).
 const path = require("path");
 
+app.set("view engine", "ejs");//this tells Express that your template engine is EJS.
+app.set("views", path.join(__dirname, "views"));//This sets the folder where Express should look for your .ejs files
+
+app.use(express.urlencoded({extended: true}));//This middleware is used to parse incoming data
+
 //tells Express to start an HTTP server on port 8080
 app.listen(8080,() =>{
     console.log(`server is listening to port 8080`);
@@ -32,25 +37,16 @@ async function main() {
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }
 
-// it will add sample data for listing schema
-// app.get("/testListing", async (req,res) =>{
-//     let sampleListing = new Listing({
-//     title: "Mountain View Cabin",     // required field
-//     description: "A cozy wooden cabin with a breathtaking view of the Himalayas.",
-//     image: "", // agar blank diya to default Unsplash image set ho jayegi
-//     price: 2500,
-//     location: "Manali",
-//     country: "India"
-//     });
-
-// // Pehla document save karne par "listings" collection banega
-// await sampleListing.save();
-// res.send("sample data added");
-// });
-
-
 //Index Route
 app.get("/listing",async (req,res) => {
    const allListings = await Listing.find({});
-   res.render("index.ejs", {allListings});
+   res.render("listings/index.ejs", {allListings});
 });
+
+app.get("/listing/:id",async (req,res) => {
+        // let { id } = req.params;//grab the id from URL
+       const listing = await Listing.findById("68b1f33922551b724e488b6c");
+    res.send("server is working");
+//    res.render("listings/show.ejs", {listing});
+});
+
