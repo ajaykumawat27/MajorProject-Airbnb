@@ -38,15 +38,37 @@ async function main() {
 }
 
 //Index Route
-app.get("/listing",async (req,res) => {
+app.get("/listings",async (req,res) => {
    const allListings = await Listing.find({});
    res.render("listings/index.ejs", {allListings});
 });
 
-app.get("/listing/:id",async (req,res) => {
-        // let { id } = req.params;//grab the id from URL
-       const listing = await Listing.findById("68b1f33922551b724e488b6c");
-    res.send("server is working");
-//    res.render("listings/show.ejs", {listing});
+//New Route  (it is before id route b/z it thinks that new is an id)
+app.get("/listings/new",async (req,res) => {
+    res.render("listings/new.ejs");
+});
+
+
+// Create Route
+app.post("/listings",async (req, res) =>{
+    // let {title, description, image, price, country, location}= req.body;
+    const newListing = new Listing(req.body.listing);
+    await newListing.save();
+    res.redirect("/listing");
+
+})
+
+
+//Edit Route has edit.ejs
+app.get("/listings/:id/edit", async (req, res) => {
+    let { id } = req.params; // grab the id from URL
+    const listing = await Listing.findById(id);
+    res.render("listings/edit.ejs", { listing }); 
+});
+
+app.get("/listings/:id",async (req,res) => {
+    let {id} = req.params;//grab the id from URL
+   const listing = await Listing.findById(id);
+res.render("listings/show.ejs", { listing });
 });
 
