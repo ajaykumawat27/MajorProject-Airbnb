@@ -6,6 +6,9 @@ const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 
+app.use(express.urlencoded({extended: true}));//This middleware is used to parse incoming data and is defined before method-override
+const methodOverride = require("method-override");//form's post request converted to put
+
 // Loads Node.js’s built-in Path module.
 // path → This module provides utilities for working with file and directory paths (e.g., joining paths, resolving absolute paths, getting file extensions).
 const path = require("path");
@@ -13,7 +16,7 @@ const path = require("path");
 app.set("view engine", "ejs");//this tells Express that your template engine is EJS.
 app.set("views", path.join(__dirname, "views"));//This sets the folder where Express should look for your .ejs files
 
-app.use(express.urlencoded({extended: true}));//This middleware is used to parse incoming data
+app.use(methodOverride("_method"));
 
 //tells Express to start an HTTP server on port 8080
 app.listen(8080,() =>{
@@ -64,6 +67,27 @@ app.get("/listings/:id/edit", async (req, res) => {
     let { id } = req.params; // grab the id from URL
     const listing = await Listing.findById(id);
     res.render("listings/edit.ejs", { listing }); 
+});
+
+//Put Request for Edit Route which means it is a Update route 
+app.put("/listings/:id", async (req, res) => {
+        let { id } = req.params; // grab the id from URL
+       await Listing.findByIdAndUpdate(id, {...req.body.listing});
+       res.redirect(`/listings/${id}`);
+});
+
+
+// app.get("/listings/:id/delete", async (req, res) => {
+//     let { id } = req.params; // grab the id from URL
+//     const listing = await Listing.findById(id);
+//     res.render("listings/delete.ejs", { listing }); 
+// });
+
+//Delete Route
+app.delete("/listings/:id", async (req, res) => {
+        let { id } = req.params; // grab the id from URL
+       await Listing.findByIdAndDelete(id);
+       res.redirect("/listings");
 });
 
 app.get("/listings/:id",async (req,res) => {

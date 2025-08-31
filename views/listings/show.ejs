@@ -30,7 +30,13 @@
 
     </ul>
     <br><br>
-    <a href="/listings/<%= listing._id %>/edit">Edit</a>
+    <!-- when we click on Edit the href link will be activated for that id in which show.ejs is currently opened 
+     or jaise he es link par jaayenge vaise he Edit Route got activated in app.js-->
+    <a href="/listings/<%= listing._id %>/edit">Edit</a> <!--edit k liye alag se form banaya hai edit.ejs main h-->
+    <br><br>
+    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+        <button>Delete</button>
+    </form>
 </body>
 
 </html>
