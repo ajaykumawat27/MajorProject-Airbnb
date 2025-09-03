@@ -1,22 +1,18 @@
 //loads the Express framework (a Node.js library for building web applications and APIs). And const express is a function 
-const express = require("express");
-//express function is executed and this function return value which is then stored in a variable app
-// this app will help us to write server side code + app is a object
+const express = require("express"); //express function is executed and this function return value which is then stored in a variable app this app will help us to write server side code + app is a object
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
+const ejsMate = require("ejs-mate");//TOOL used for templating of (navbar,footer)
+const methodOverride = require("method-override");//form's post request converted to put
+const path = require("path");// Loads Node.js’s built-in Path module & path → This module provides utilities for working with file and directory paths (e.g., joining paths, resolving absolute paths, getting file extensions).
 
 app.use(express.urlencoded({extended: true}));//This middleware is used to parse incoming data and is defined before method-override
-const methodOverride = require("method-override");//form's post request converted to put
-
-// Loads Node.js’s built-in Path module.
-// path → This module provides utilities for working with file and directory paths (e.g., joining paths, resolving absolute paths, getting file extensions).
-const path = require("path");
-
 app.set("view engine", "ejs");//this tells Express that your template engine is EJS.
 app.set("views", path.join(__dirname, "views"));//This sets the folder where Express should look for your .ejs files
-
 app.use(methodOverride("_method"));
+app.engine('ejs', ejsMate);
+app.use(express.static(path.join(__dirname, "/public")))
 
 //tells Express to start an HTTP server on port 8080
 app.listen(8080,() =>{
@@ -75,13 +71,6 @@ app.put("/listings/:id", async (req, res) => {
        await Listing.findByIdAndUpdate(id, {...req.body.listing});
        res.redirect(`/listings/${id}`);
 });
-
-
-// app.get("/listings/:id/delete", async (req, res) => {
-//     let { id } = req.params; // grab the id from URL
-//     const listing = await Listing.findById(id);
-//     res.render("listings/delete.ejs", { listing }); 
-// });
 
 //Delete Route
 app.delete("/listings/:id", async (req, res) => {
