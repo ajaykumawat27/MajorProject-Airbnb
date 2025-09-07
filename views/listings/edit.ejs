@@ -1,50 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout('layouts/boilerplate') -%>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-
-<body>
   <h3>Edit Your Listing</h3>
+  <div class="row mt-3">
+    <div class="col-8 offset-2">
+      <!-- This form sends a POST request The query parameter "_method=PUT" is used with method-override middleware
+      so the server will treat this request as a PUT request instead of POST.-->
+      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
+        <div class="mb-3">
+          <label class="form-label" for="title">Enter Title : </label><br>
+          <input class="form-control" type="text" id="title" name="listing[title]" value="<%= listing.title %>">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="description">Enter Description :</label><br>
+          <textarea class="form-control" id="description" name="listing[description]"><%=listing.description%></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="image">Uploaded Image :</label><br>
+          <input class="form-control" type="text" name="listing[image]" value="<%= listing.image.url %>">
+        </div>
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label" for="price">Enter Price :</label><br>
+            <input class="form-control" type="number" id="price" name="listing[price]" value="<%= listing.price%>">
+          </div>
+
+          <div class="mb-3 col-md-8">
+            <label class="form-label" for="country">Enter Country :</label><br>
+            <input class="form-control" type="text" id="country" name="listing[country]" value="<%= listing.country%>">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="location">Enter Location :</label><br>
+          <input class="form-control" type="text" id="location" name="listing[location]" value="<%=listing.location%>">
+        </div>
 
 
-<!-- This form sends a POST request The query parameter "_method=PUT" is used with method-override middleware
-so the server will treat this request as a PUT request instead of POST.-->
-  <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
-
-    <label for="title">Enter Title : </label><br>
-    <input type="text" id="title" name="listing[title]"value= "<%= listing.title %>"
-      placeholder="please enter the title...">
-    <br><br>
-
-    <label for="description">Enter Description :</label><br>
-    <textarea id="description" name="listing[description]"
-     placeholder="please enter the description...">    <%= listing.description %>   </textarea>
-    <br><br>
-    
-    <!-- <label for="image">Uploaded Image :</label><br>
-    <input type="text" name="listing[image]" value="<%= listing.image %>">
-    <br><br> -->
-    <label for="price">Enter Price :</label><br>
-    <input type="number" id="price" name="listing[price]" value="<%= listing.price%>"
-      placeholder="please enter the price...">
-    <br><br>
-
-    <label for="location">Enter Location :</label><br>
-    <input type="text" id="location" name="listing[location]" value="<%=listing.location%>"
-      placeholder="please enter the location...">
-    <br><br>
-
-    <label for="country">Enter Country :</label><br>
-    <input type="text" id="country" name="listing[country]" value="<%= listing.country%>"
-      placeholder="please enter your country...">
-    <br><br>
-
-    <button>Edit</button>
-  </form>
-</body>
-
-</html>
+        <button class="btn btn-warning mt-5">Edit</button>
+      </form>
+    </div>
+  </div>
